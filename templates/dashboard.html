@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-3">Welcome, {{ user.email }}</h2>
+  <p><strong>Wallet Balance:</strong> ₹{{ user.wallet.balance }}</p>
+
+  <form method="get" class="row g-2 mb-4">
+    <div class="col-md-3">
+      <input class="form-control" name="search" placeholder="Search description" value="{{ request.args.get('search', '') }}">
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="type">
+        <option value="all">All Types</option>
+        <option value="income" {% if request.args.get('type') == 'income' %}selected{% endif %}>Income</option>
+        <option value="expense" {% if request.args.get('type') == 'expense' %}selected{% endif %}>Expense</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <input class="form-control" name="category" placeholder="Category" value="{{ request.args.get('category', '') }}">
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="sort_by">
+        <option value="timestamp" {% if request.args.get('sort_by') == 'timestamp' %}selected{% endif %}>Date</option>
+        <option value="amount" {% if request.args.get('sort_by') == 'amount' %}selected{% endif %}>Amount</option>
+        <option value="category" {% if request.args.get('sort_by') == 'category' %}selected{% endif %}>Category</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="order">
+        <option value="asc" {% if request.args.get('order') == 'asc' %}selected{% endif %}>ASC</option>
+        <option value="desc" {% if request.args.get('order') == 'desc' %}selected{% endif %}>DESC</option>
+      </select>
+    </div>
+    <div class="col-md-1">
+      <button type="submit" class="btn btn-primary w-100">Apply</button>
+    </div>
+  </form>
+
+  <h3 class="mt-4 mb-3">Transactions:</h3>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead class="table-light">
+        <tr>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for txn in transactions %}
+        <tr>
+          <td>{{ txn.type }}</td>
+          <td>₹{{ txn.amount }}</td>
+          <td>{{ txn.category }}</td>
+          <td>{{ txn.description }}</td>
+          <td>{{ txn.timestamp.strftime("%d %b %Y") }}</td>
+          <td><a class="btn btn-danger btn-sm" href="{{ url_for('delete_transaction', txn_id=txn.id) }}">🗑️</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if pie_chart %}
+    <h3 class="mt-5">Pie Chart</h3>
+    <img src="data:image/png;base64,{{ pie_chart }}" class="img-fluid mb-4">
+  {% endif %}
+
+  {% if bar_chart %}
+    <h3>Bar Chart</h3>
+    <img src="data:image/png;base64,{{ bar_chart }}" class="img-fluid mb-4">
+  {% endif %}
+
+  <a href="{{ url_for('add_transaction') }}" class="btn btn-success me-2">➕ Add Transaction</a>
+  <a href="{{ url_for('chatbot') }}" class="btn btn-secondary">🤖 Chat with your Financial Assistant</a>
+</div>
+{% endblock %}

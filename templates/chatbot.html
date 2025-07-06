@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">💬 Financial Chatbot Assistant</h2>
+
+  <form method="POST" class="mb-4">
+    <div class="mb-3">
+      <textarea name="message" class="form-control" placeholder="Ask something like 'How much did I spend on food?'" rows="4" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Ask</button>
+  </form>
+
+  {% if reply %}
+    <div class="card p-3 mb-4">
+      <h4 class="mb-2">🧠 Bot Says:</h4>
+      <p class="mb-0">{{ reply }}</p>
+    </div>
+  {% endif %}
+
+  <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light">← Back to Dashboard</a>
+</div>
+{% endblock %}

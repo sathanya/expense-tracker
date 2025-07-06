@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-white container mt-5">
+  <h2 class="mb-4">📊 Your Expense Analysis</h2>
+
+  {% if pie_chart %}
+    <h4>Expense Distribution (Pie Chart)</h4>
+    <img src="data:image/png;base64,{{ pie_chart }}" class="img-fluid mb-4">
+  {% else %}
+    <p>No expense data to show pie chart.</p>
+  {% endif %}
+
+  {% if bar_chart %}
+    <h4>Category-wise Expenses (Bar Chart)</h4>
+    <img src="data:image/png;base64,{{ bar_chart }}" class="img-fluid mb-4">
+  {% else %}
+    <p>No expense data to show bar chart.</p>
+  {% endif %}
+
+  <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light mt-3">← Back to Dashboard</a>
+</div>
+{% endblock %}
